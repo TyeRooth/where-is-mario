@@ -1,10 +1,5 @@
 import styles from './GameHeader.module.scss';
 
-import yoshi from '../assets/yoshi.png';
-import waluigi from '../assets/waluigi.png';
-import jigglypuff from '../assets/jigglypuff.png';
-import olimar from '../assets/olimar.png';
-
 const GameHeader = (props) => {
     const characters = props.chars;
     const charImgs = characters.map(char => {

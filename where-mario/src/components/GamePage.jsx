@@ -12,13 +12,19 @@ import olimar from '../assets/olimar.png';
 
 const GamePage = () => {
     const [characters, setcharacters] = useState(characterDetails);
+    const [DropdownCoords, setDropdownCoords] = useState({x: null, y: null});
 
     const handleClick = (e) => {
         console.log(e);
-    }
+        if (DropdownCoords.x !== null && DropdownCoords.y !== null) {
+            setDropdownCoords({x: null, y: null});
+        } else {
+            setDropdownCoords({x: e.clientX, y: e.clientY});
+        };
+    };
 
-    const charactersShown = true;
-    const dropdownMenu = charactersShown ? <Dropdown /> : null
+    const dropdownMenu = DropdownCoords.x !== null ? 
+        <Dropdown chars={characters} coords={DropdownCoords}/> : null;
 
     return (
         <div className={styles.root}>
