@@ -1,20 +1,29 @@
 import styles from './NamePrompt.module.scss';
 import { Link } from 'react-router-dom';
+import { db } from '../utils/firebase';
+import { setDoc, doc } from 'firebase/firestore';
+import uniqid from 'uniqid';
 
-const NamePrompt = () => {
-    const handleSubmission = (e) => {
+const NamePrompt = (props) => {
+
+    const handleSubmission = async (e) => {
         e.preventDefault();
-        console.log(e.target[0].value);
-    }
+        const name = e.target[0].value;
+        await setDoc(doc(db, "scores", uniqid()), {
+            name: name,
+            score: props.time,
+        });
+    };
+
     return (
         <div className={styles.root}>
-            <p className={styles.time}>You finished in 13 seconds!</p>
+            <p className={styles.time}>You finished in {props.time} seconds!</p>
             <p className={styles.description}>Submit your score on the global leaderboard.</p>
             <form className={styles.form} onSubmit={handleSubmission}>
-                <label for="username" className={styles.label}>Username</label>
+                <label htmlFor="username" className={styles.label}>Username</label>
                 <input id="username" className={styles.input} type="text"></input>
                 <div className={styles['buttons-container']}>
-                    <Link to="/"><button type="button" className={styles.cancel}>Cancel</button></Link>
+                    <Link to="/"><button type="button" className={styles.cancel} onClick={props.reset}>Cancel</button></Link>
                     <button className={styles.submit}>Submit</button>
                 </div>
             </form>

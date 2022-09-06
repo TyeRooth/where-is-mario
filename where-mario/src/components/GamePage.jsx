@@ -25,8 +25,12 @@ const GamePage = () => {
     useEffect(() => {
         if (characters.filter(char => !char.found).length === 0) {
             setWin(true);
-        };
+        } else {setWin(false)};
+        // The else statement is needed for resetting the game
     });
+
+    console.log(win);
+    console.log(characters);
 
     const [timer, setTimer] = useState(0);
     useEffect(() => {
@@ -89,10 +93,18 @@ const GamePage = () => {
         setcharacters(updatedCharacters);
     };
 
+    const resetGame = () => {
+        const resetChars = characters.map(char => {
+            char.found = false;
+            return char;
+        });
+        setcharacters(resetChars);
+    };
+
     const dropdownMenu = dropdownCoords.x !== null && dropdownCoords.y !== null ? 
         <Dropdown chars={characters} coords={dropdownCoords} positionCheck={validateCharacterFound}/> : null;
 
-    const winPrompt = win ? <NamePrompt time={timer} /> : null;
+    const winPrompt = win ? <NamePrompt time={timer} reset={resetGame}/> : null;
 
     return (
         <div className={styles.root}>
