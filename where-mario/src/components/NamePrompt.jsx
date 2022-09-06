@@ -1,10 +1,11 @@
 import styles from './NamePrompt.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../utils/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 import uniqid from 'uniqid';
 
 const NamePrompt = (props) => {
+    let navigate = useNavigate();
 
     const handleSubmission = async (e) => {
         e.preventDefault();
@@ -13,6 +14,7 @@ const NamePrompt = (props) => {
             name: name,
             score: props.time,
         });
+        navigate("/leaderboard", {replace: true});
     };
 
     return (
