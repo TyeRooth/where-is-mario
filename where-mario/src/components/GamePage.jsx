@@ -11,12 +11,25 @@ import yoshi from '../assets/yoshi.png';
 import waluigi from '../assets/waluigi.png';
 import jigglypuff from '../assets/jigglypuff.png';
 import olimar from '../assets/olimar.png';
+import { useEffect } from 'react';
 
 const GamePage = () => {
     const [characters, setcharacters] = useState(characterDetails);
 
     //x,y for where clicked.  xRel,yRel for where in the image was clicked (value between 0-1)
     const [dropdownCoords, setDropdownCoords] = useState({x: null, y: null, xRel: null, yRel: null});
+
+    //Check for Win
+    const [win, setWin] = useState(false);
+
+    const [timer, setTimer] = useState(0);
+    useEffect(() => {
+        if (!win) {
+            const clock = setTimeout(() => {
+                setTimer(timer + 1);
+            }, 1000);
+        }
+    });
 
     const handleImageClick = (e) => {
         if (dropdownCoords.x !== null && dropdownCoords.y !== null) {
@@ -75,7 +88,7 @@ const GamePage = () => {
 
     return (
         <div className={styles.root}>
-            <GameHeader chars={characters}/>
+            <GameHeader chars={characters} time={timer}/>
             <img src={gameImage} alt="game" 
                 className={styles['game-image']}
                 onClick={handleImageClick}>
@@ -97,7 +110,7 @@ const characterDetails = [
         found: false,
     },
     {
-        name: "JigglyPuff",
+        name: "Jigglypuff",
         src: jigglypuff,
         found: false,
     },

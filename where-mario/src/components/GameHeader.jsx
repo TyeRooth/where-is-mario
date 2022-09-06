@@ -10,7 +10,7 @@ const GameHeader = (props) => {
 
     return (
         <div className={styles.root}>
-            <div className={styles.timer}>0</div>
+            <div className={styles.timer}>{props.time}</div>
             <div className={styles.characters}>
                 {charImgs}
             </div>
