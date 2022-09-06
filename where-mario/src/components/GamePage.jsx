@@ -1,6 +1,7 @@
 import styles from './GamePage.module.scss';
 import { useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../utils/firebase';
 
 import gameImage from '../assets/wheres-mario.jpg';
 import GameHeader from './GameHeader';
@@ -15,12 +16,10 @@ const GamePage = () => {
     const [characters, setcharacters] = useState(characterDetails);
 
     //x,y for where clicked.  xRel,yRel for where in the image was clicked (value between 0-1)
-    const [DropdownCoords, setDropdownCoords] = useState({x: null, y: null, xRel: null, yRel: null});
-    console.log(DropdownCoords);
+    const [dropdownCoords, setDropdownCoords] = useState({x: null, y: null, xRel: null, yRel: null});
 
     const handleImageClick = (e) => {
-        console.log(e);
-        if (DropdownCoords.x !== null && DropdownCoords.y !== null) {
+        if (dropdownCoords.x !== null && dropdownCoords.y !== null) {
             setDropdownCoords({x: null, y: null, xRel: null, yRel: null});
         } else {
             setDropdownCoords({
@@ -39,12 +38,30 @@ const GamePage = () => {
         return (clickedCoord - gameOffset)/gameDimension;
     }
 
-    const validateCharacterFound = (name) => {
-
+    const validateCharacterFound = async (name) => {
+        const docRef = doc(db, "Character Locations", name);
+        const positionsDoc = await getDoc(docRef);
+        const charPos = positionsDoc._document.data.value.mapValue.fields
+        if (checkWithinCoords(charPos)) {
+            console.log(3);
+        }
+        handleImageClick();
+    }
+    
+    const checkWithinCoords = (charBox) => {
+        const x = dropdownCoords.xRel;
+        const y = dropdownCoords.yRel;
+        const left = charBox.left.doubleValue;
+        const top = charBox.top.doubleValue;
+        const right = charBox.right.doubleValue;
+        const bottom = charBox.bottom.doubleValue;
+        if (x > left && x < right && y > top && y < bottom) {
+            return true;
+        } else {return false};
     }
 
-    const dropdownMenu = DropdownCoords.x !== null ? 
-        <Dropdown chars={characters} coords={DropdownCoords}/> : null;
+    const dropdownMenu = dropdownCoords.x !== null ? 
+        <Dropdown chars={characters} coords={dropdownCoords} positionCheck={validateCharacterFound}/> : null;
 
     return (
         <div className={styles.root}>

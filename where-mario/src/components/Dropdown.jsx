@@ -1,11 +1,12 @@
 import styles from './Dropdown.module.scss';
 
 const Dropdown = (props) => {
+    const validateCharacterPosition = props.positionCheck;
     const characters = props.chars;
     const notFoundChars = characters.filter(char => !char.found);
     const charOptions = notFoundChars.map(char => {
         return (
-            <div className={styles.charOption} key={char.name}>
+            <div className={styles.charOption} key={char.name} onClick={() => validateCharacterPosition(char.name)}>
                 <img src={char.src} alt={char.name} className={styles.picture}></img>
                 <p className={styles.name}>{char.name}</p>
             </div>
