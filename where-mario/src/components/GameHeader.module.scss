@@ -5,6 +5,9 @@
     background-color: rgb(36, 36, 36);
     justify-content: space-around;
     align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1;
 }
 
 .timer {
