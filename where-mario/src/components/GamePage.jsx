@@ -6,6 +6,7 @@ import { db } from '../utils/firebase';
 import gameImage from '../assets/wheres-mario.jpg';
 import GameHeader from './GameHeader';
 import Dropdown from './Dropdown';
+import NamePrompt from './NamePrompt';
 
 import yoshi from '../assets/yoshi.png';
 import waluigi from '../assets/waluigi.png';
@@ -21,11 +22,16 @@ const GamePage = () => {
 
     //Check for Win
     const [win, setWin] = useState(false);
+    useEffect(() => {
+        if (characters.filter(char => !char.found).length === 0) {
+            setWin(true);
+        };
+    });
 
     const [timer, setTimer] = useState(0);
     useEffect(() => {
         if (!win) {
-            const clock = setTimeout(() => {
+            setTimeout(() => {
                 setTimer(timer + 1);
             }, 1000);
         }
@@ -83,8 +89,10 @@ const GamePage = () => {
         setcharacters(updatedCharacters);
     };
 
-    const dropdownMenu = dropdownCoords.x !== null ? 
+    const dropdownMenu = dropdownCoords.x !== null && dropdownCoords.y !== null ? 
         <Dropdown chars={characters} coords={dropdownCoords} positionCheck={validateCharacterFound}/> : null;
+
+    const winPrompt = win ? <NamePrompt time={timer} /> : null;
 
     return (
         <div className={styles.root}>
@@ -94,6 +102,7 @@ const GamePage = () => {
                 onClick={handleImageClick}>
             </img>
             {dropdownMenu}
+            {winPrompt}
         </div>
     );
 };
