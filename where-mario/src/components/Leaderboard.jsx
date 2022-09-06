@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from "../utils/firebase";
 import uniqid from 'uniqid';
+import { Link } from 'react-router-dom';
 
 const Leaderboard = () => {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -25,7 +26,7 @@ const Leaderboard = () => {
     const sortedBoard = leaderboard.sort((a, b) => a.score - b.score);
     const leaderBoardTable = sortedBoard.map((entry, index) => {
         return (
-            <tr key={uniqid()}>
+            <tr key={uniqid()} className={styles.row}>
                 <td>{index + 1}</td>
                 <td>{entry.name}</td>
                 <td>{entry.score}</td>
@@ -35,6 +36,7 @@ const Leaderboard = () => {
     
     return (
         <div className={styles.root}>
+            <Link to="/" className={styles.home}>Home Page</Link>
             <h1 className={styles.heading}>LeaderBoard</h1>
             <table className={styles.board}>
                 <thead className={styles['table-head']}>
