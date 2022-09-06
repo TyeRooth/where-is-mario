@@ -23,6 +23,12 @@
     gap: 50px;
 }
 
-.character {
+.character,
+.found {
     height: 100%;
 }
+
+.found {
+    opacity: 0.5;
+}
+

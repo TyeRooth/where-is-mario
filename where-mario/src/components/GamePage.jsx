@@ -43,10 +43,10 @@ const GamePage = () => {
         const positionsDoc = await getDoc(docRef);
         const charPos = positionsDoc._document.data.value.mapValue.fields
         if (checkWithinCoords(charPos)) {
-            console.log(3);
+            markCharacterAsFound(name);
         }
         handleImageClick();
-    }
+    };
     
     const checkWithinCoords = (charBox) => {
         const x = dropdownCoords.xRel;
@@ -58,7 +58,17 @@ const GamePage = () => {
         if (x > left && x < right && y > top && y < bottom) {
             return true;
         } else {return false};
-    }
+    };
+
+    const markCharacterAsFound = (name) => {
+        const updatedCharacters = characters.map(char => {
+            if (char.name === name) {
+                char.found = true;
+            };
+            return char;
+        });
+        setcharacters(updatedCharacters);
+    };
 
     const dropdownMenu = dropdownCoords.x !== null ? 
         <Dropdown chars={characters} coords={dropdownCoords} positionCheck={validateCharacterFound}/> : null;
